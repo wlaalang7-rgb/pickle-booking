@@ -1,0 +1,13 @@
+﻿# Local secrets and developer environment
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+
+# Local platform state
+.wrangler/
+supabase/.temp/
+supabase/.env
+supabase/.env.*

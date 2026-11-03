@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5ef">
+  <meta name="description" content="PickleRally booking management dashboard.">
+  <title>Booking admin - PickleRally</title>
+  <link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase.js" defer></script>
+  <script src="js/admin-state.js" defer></script>
+  <script src="js/admin-analytics.js" defer></script>
+  <script src="js/admin-booking.js" defer></script>
+  <script src="js/admin-courts.js" defer></script>
+  <script src="js/admin-calendar.js" defer></script>
+  <script src="js/admin-bookings.js" defer></script>
+  <script src="js/admin-actions.js" defer></script>
+  <script src="js/admin-navigation-export.js" defer></script>
+</head>
+<body class="admin-page">
+  <a class="skip-link" href="#admin-main">Skip to content</a>
+  <header class="admin-header">
+    <a class="brand" href="index.html" aria-label="PickleRally home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M13 5a9 9 0 0 1 9 9v8a9 9 0 1 1-18 0v-8a9 9 0 0 1 9-9Z"/><path d="m16 29 7 7M27 8h1m5 5h1m-7 5h1m6 4h1m-7 5h1"/></svg></span>
+      <span>pickle<span class="brand-light">rally</span></span>
+    </a>
+    <div class="admin-header-actions">
+      <span class="admin-label">Staff workspace</span>
+      <div class="admin-header-buttons">
+        <button class="button button-dark admin-site-link" id="admin-sign-out" type="button" hidden>Sign out</button>
+        <a class="button button-dark admin-site-link" href="index.html">View website <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-login" id="admin-login">
+    <section class="admin-login-card" aria-labelledby="admin-login-title">
+      <h1 id="admin-login-title">Staff sign in</h1>
+      <p class="admin-login-description">Sign in with your staff account to manage court requests.</p>
+      <p class="admin-login-feedback" id="admin-login-feedback" role="alert" aria-live="assertive"></p>
+      <form id="admin-login-form">
+        <label for="admin-email">Staff email</label>
+        <input id="admin-email" type="email" autocomplete="username" required>
+        <label for="admin-password">Password</label>
+        <input id="admin-password" type="password" autocomplete="current-password" required>
+        <button class="button button-lime" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+      </form>
+      <p class="admin-login-help">Staff accounts must be created in your Supabase project. Public sign-ups should remain disabled.</p>
+    </section>
+  </main>
+
+  <main class="admin-main" id="admin-main" hidden>
+    <aside class="admin-sidebar" aria-label="Staff dashboard sections">
+      <p class="admin-sidebar-label">Club management</p>
+      <nav class="admin-sidebar-nav">
+        <a class="admin-nav-link is-active" href="#overview" aria-label="Analytics" title="Analytics" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+          <span class="admin-nav-label">Analytics</span>
+        </a>
+        <a class="admin-nav-link" href="#bookings" aria-label="Bookings" title="Bookings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"></rect><path d="M8 3v4m8-4v4M4 10h16M8 14h3m-3 3h6"></path></svg>
+          <span class="admin-nav-label">Bookings</span>
+          <span class="admin-nav-count" id="booking-notification" aria-live="polite" aria-atomic="true" hidden></span>
+        </a>
+        <a class="admin-nav-link" href="#calendar" aria-label="Booking calendar" title="Booking calendar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4m8-4v4M4 10h16M8 14h2m4 0h2m-8 3h2m4 0h2"></path></svg>
+          <span class="admin-nav-label">Calendar</span>
+        </a>
+        <a class="admin-nav-link" href="#court-rates" aria-label="Courts and rates" title="Courts and rates">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8m-8 6h5"></path></svg>
+          <span class="admin-nav-label">Courts &amp; rates</span>
+        </a>
+        <a class="admin-nav-link" href="#promo-codes" aria-label="Promo codes" title="Promo codes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13 13 20 3 10V4h6l11 9Z"></path><circle cx="7.5" cy="7.5" r="1"></circle></svg>
+          <span class="admin-nav-label">Promo codes</span>
+        </a>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <span>Staff workspace</span>
+      </div>
+    </aside>
+
+    <div class="admin-content">
+      <section class="admin-overview" id="overview" aria-labelledby="overview-title">
+        <section class="admin-intro">
+          <div>
+            <h1 id="overview-title">Analytics</h1>
+            <p>Revenue trends and court bookings across PickleRally.</p>
+          </div>
+          <div class="admin-intro-actions">
+            <button class="button button-dark" id="open-admin-booking" type="button" disabled>New booking <span aria-hidden="true">＋</span></button>
+          </div>
+        </section>
+
+        <section class="admin-revenue" aria-labelledby="revenue-title">
+          <div class="admin-revenue-heading">
+            <div>
+              <h2 id="revenue-title">Revenue analytics</h2>
+            </div>
+            <p>Estimated totals for confirmed bookings, grouped by booking date.</p>
+          </div>
+          <div class="admin-revenue-grid">
+            <article class="admin-revenue-card"><span>Daily</span><strong id="revenue-daily">₱0</strong><small>Today</small></article>
+            <article class="admin-revenue-card"><span>Weekly</span><strong id="revenue-weekly">₱0</strong><small>This week</small></article>
+            <article class="admin-revenue-card"><span>Monthly</span><strong id="revenue-monthly">₱0</strong><small>This month</small></article>
+            <article class="admin-revenue-card"><span>Yearly</span><strong id="revenue-yearly">₱0</strong><small>This year</small></article>
+          </div>
+        </section>
+
+        <div class="admin-dashboard-grid">
+          <section class="admin-chart-card admin-revenue-chart-card" aria-labelledby="revenue-chart-title">
+            <div class="admin-chart-heading">
+              <div>
+                <h2 id="revenue-chart-title">Revenue trend</h2>
+                <p>Confirmed booking estimates by scheduled court date, including upcoming bookings.</p>
+              </div>
+              <label class="admin-chart-period-label" for="revenue-chart-period">
+                <span>Period</span>
+                <select id="revenue-chart-period">
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </label>
+            </div>
+            <p class="admin-chart-summary" id="revenue-chart-summary" role="status" aria-live="polite"></p>
+            <div class="admin-chart-viewport">
+              <div class="admin-revenue-chart" id="revenue-chart" role="img" aria-label="Estimated revenue from confirmed bookings for the last seven days"></div>
+            </div>
+          </section>
+
+          <section class="admin-chart-card admin-status-card" aria-labelledby="status-chart-title">
+            <div class="admin-chart-heading">
+              <div>
+                <h2 id="status-chart-title">Booking status</h2>
+                <p>All requests</p>
+              </div>
+            </div>
+            <div class="admin-status-layout">
+              <div class="admin-status-ring" id="booking-status-chart" role="img" aria-label="Booking status breakdown">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <circle class="admin-status-ring-track" cx="50" cy="50" r="40"></circle>
+                  <g id="booking-status-segments" transform="rotate(-90 50 50)"></g>
+                </svg>
+                <div class="admin-status-ring-center">
+                  <strong id="booking-status-total">0</strong>
+                  <span>bookings</span>
+                </div>
+              </div>
+              <div class="admin-status-breakdown" id="status-breakdown"></div>
+            </div>
+          </section>
+
+          <section class="admin-chart-card admin-activity-card" aria-labelledby="performance-title">
+            <div class="admin-chart-heading">
+              <div>
+                <h2 id="performance-title">Booking activity</h2>
+                <p>Each bar is a request created on that date; its count is shown above.</p>
+              </div>
+              <label class="admin-chart-period-label" for="performance-period">
+                <span>Period</span>
+                <select id="performance-period">
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </label>
+            </div>
+            <p class="admin-chart-summary" id="performance-chart-summary" role="status" aria-live="polite"></p>
+            <div class="admin-chart-viewport">
+              <div class="admin-chart" id="performance-chart" role="img" aria-label="Booking activity for the last 7 days"></div>
+            </div>
+          </section>
+
+          <aside class="admin-analytics-side" aria-label="Court performance">
+            <section class="admin-metric-card">
+              <div class="admin-metric-heading">
+                <h2>Booking volume</h2>
+                <span>Not cancelled</span>
+              </div>
+              <div class="admin-booking-counts">
+                <div><span>Today</span><strong id="booking-count-daily">0</strong></div>
+                <div><span>This week</span><strong id="booking-count-weekly">0</strong></div>
+                <div><span>This month</span><strong id="booking-count-monthly">0</strong></div>
+              </div>
+            </section>
+
+            <section class="admin-metric-card admin-court-metric">
+              <div class="admin-metric-heading">
+                <h2>Bookings per court</h2>
+                <span>This month</span>
+              </div>
+              <p class="admin-court-summary" id="court-booking-summary"></p>
+              <div class="admin-court-breakdown" id="court-booking-breakdown"></div>
+              <div class="admin-court-axis" id="court-booking-axis" aria-hidden="true"></div>
+            </section>
+
+            <section class="admin-side-metrics" aria-label="Weekly performance metrics">
+              <div class="admin-metric-card">
+                <div class="admin-metric-heading"><h2>Occupancy</h2><span>This week</span></div>
+                <strong class="admin-metric-primary" id="occupancy-rate">0%</strong>
+                <p class="admin-metric-caption" id="occupancy-detail">0 of 420 court hours booked</p>
+              </div>
+              <div class="admin-metric-card">
+                <div class="admin-metric-heading"><h2>Average booking value</h2><span>Active</span></div>
+                <strong class="admin-metric-primary" id="average-booking-value">₱0</strong>
+                <p class="admin-metric-caption">Per non-cancelled booking</p>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="admin-bookings" id="bookings" aria-labelledby="bookings-title" hidden>
+      <div class="admin-list-heading">
+        <div><h1 id="bookings-title">Booking requests</h1></div>
+        <div class="admin-list-tools">
+          <label class="admin-search"><span class="visually-hidden">Search bookings</span><input id="booking-search" type="search" placeholder="Search name, email, court…"></label>
+          <div class="admin-filter-controls" aria-label="Filter by booking date and court">
+            <label class="admin-filter-field" for="booking-date-filter">
+              <span>Booking date</span>
+              <input id="booking-date-filter" type="date">
+            </label>
+            <label class="admin-filter-field" for="booking-court-filter">
+              <span>Court</span>
+              <select id="booking-court-filter">
+                <option value="">All courts</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="admin-toolbar">
+        <div class="admin-filters" role="group" aria-label="Filter bookings">
+          <button class="admin-filter is-active" type="button" data-filter="all" aria-pressed="true">All <span id="count-all">0</span></button>
+          <button class="admin-filter" type="button" data-filter="pending" aria-pressed="false">Pending <span id="count-pending">0</span></button>
+          <button class="admin-filter" type="button" data-filter="confirmed" aria-pressed="false">Confirmed <span id="count-confirmed">0</span></button>
+          <button class="admin-filter" type="button" data-filter="cancelled" aria-pressed="false">Cancelled <span id="count-cancelled">0</span></button>
+        </div>
+        <div class="admin-export-actions">
+          <button class="button button-outline-light" id="export-bookings" type="button">Export CSV <span aria-hidden="true">↓</span></button>
+          <button class="button button-outline-light" id="export-excel" type="button">Export Excel <span aria-hidden="true">↓</span></button>
+        </div>
+        <div class="admin-refresh-controls">
+          <span class="admin-sync-status" id="admin-sync-status" role="status">Waiting for staff sign-in</span>
+          <button class="admin-refresh" id="refresh-bookings" type="button">Refresh now <span aria-hidden="true">↻</span></button>
+        </div>
+      </div>
+      <p class="admin-feedback" id="admin-feedback" role="status" aria-live="polite"></p>
+      <div class="booking-table-wrap">
+        <table class="booking-table">
+          <thead><tr><th scope="col">PLAYER</th><th scope="col">COURT &amp; SLOT</th><th scope="col">PLAYERS</th><th scope="col">EST. TOTAL</th><th scope="col">STATUS</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+          <tbody id="booking-list"></tbody>
+        </table>
+        <div class="admin-empty" id="booking-empty" hidden>
+          <h2 id="booking-empty-title">No booking requests yet.</h2>
+          <p id="booking-empty-message">Booking requests will appear here, or create one from the staff dashboard.</p>
+        </div>
+      </div>
+      <nav class="admin-pagination" id="booking-pagination" aria-label="Booking request pages" hidden>
+        <span class="admin-pagination-summary" id="booking-pagination-summary" role="status"></span>
+        <div class="admin-pagination-controls">
+          <button class="admin-page-button" id="booking-previous-page" type="button">← Previous</button>
+          <span class="admin-page-number" id="booking-page-number" aria-live="polite"></span>
+          <button class="admin-page-button" id="booking-next-page" type="button">Next →</button>
+        </div>
+      </nav>
+      </section>
+      <section class="admin-calendar" id="calendar" aria-labelledby="calendar-title" hidden>
+        <div class="admin-list-heading admin-calendar-heading">
+          <div>
+            <h1 id="calendar-title">Booking calendar</h1>
+            <p>Choose a date to review availability and manage maintenance times.</p>
+          </div>
+          <label class="admin-calendar-court-filter" for="calendar-court-filter">
+            <span>Court</span>
+            <select id="calendar-court-filter">
+              <option value="">All courts</option>
+            </select>
+          </label>
+        </div>
+        <div class="admin-calendar-month-toolbar">
+          <div class="admin-calendar-month-controls">
+            <button class="admin-calendar-button" id="calendar-previous-month" type="button" aria-label="Previous month">←</button>
+            <button class="admin-calendar-button" id="calendar-next-month" type="button" aria-label="Next month">→</button>
+            <button class="admin-calendar-button admin-calendar-today" id="calendar-today" type="button">Today</button>
+          </div>
+          <h2 id="calendar-month-title"></h2>
+          <p id="calendar-month-summary" role="status" aria-live="polite"></p>
+        </div>
+        <div class="admin-calendar-month">
+          <div class="admin-calendar-weekdays" aria-hidden="true">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div class="admin-calendar-grid" id="calendar-grid" aria-label="Booking dates"></div>
+          <div class="admin-calendar-date-legend" aria-label="Calendar legend">
+            <span class="is-booked">Has bookings</span>
+            <span class="is-available">No bookings</span>
+            <span class="is-closed">Maintenance or closure window</span>
+          </div>
+        </div>
+      </section>
+      <section class="admin-rates" id="court-rates" aria-labelledby="court-rates-title" hidden>
+        <div class="admin-list-heading">
+          <div>
+            <h1 id="court-rates-title">Court rates</h1>
+            <p>Manage the courts and hourly prices used on the website and in new booking estimates.</p>
+          </div>
+        </div>
+        <p class="admin-rates-note" id="court-rates-note">Set separate day and night hourly rates. Night pricing starts at 5 PM. Enter whole pesos from ₱1 to ₱100,000; thousands are grouped when you leave the field. Upload a JPG, PNG, or WebP up to 5 MB. Courts with booking history cannot be deleted.</p>
+        <p class="admin-rates-feedback" id="court-rates-feedback" role="status" aria-live="polite">Loading court rates…</p>
+        <form class="admin-rate-add-form" id="court-rate-add-form">
+          <label for="new-court-name">New court name
+            <input id="new-court-name" name="court" type="text" minlength="2" maxlength="60" autocomplete="off" required>
+          </label>
+          <label for="new-court-day-rate">Day rate / hour
+            <span class="admin-rate-control"><span class="admin-rate-currency" aria-hidden="true">₱</span><input id="new-court-day-rate" name="day_rate" type="text" inputmode="numeric" autocomplete="off" maxlength="8" pattern="[0-9,]+" aria-describedby="court-rates-note" placeholder="450" required><span class="admin-rate-unit" aria-hidden="true">/hr</span></span>
+          </label>
+          <label for="new-court-night-rate">Night rate / hour
+            <span class="admin-rate-control"><span class="admin-rate-currency" aria-hidden="true">₱</span><input id="new-court-night-rate" name="night_rate" type="text" inputmode="numeric" autocomplete="off" maxlength="8" pattern="[0-9,]+" aria-describedby="court-rates-note" placeholder="600" required><span class="admin-rate-unit" aria-hidden="true">/hr</span></span>
+          </label>
+          <div class="admin-rate-photo-fields">
+            <div class="admin-rate-image-preview-field">
+              <span class="admin-rate-image-preview-label">Photo preview</span>
+              <img class="admin-rate-image-preview" src="assets/pickleball-court-real-01.jpg" alt="Current court photo" loading="lazy" decoding="async">
+            </div>
+            <label for="new-court-image-upload">Upload image
+              <input id="new-court-image-upload" name="image_file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="new-court-image-upload-hint">
+              <span class="admin-rate-image-hint" id="new-court-image-upload-hint" role="status">JPG, PNG, or WebP · up to 5 MB.</span>
+            </label>
+            <input id="new-court-image-path" name="image_path" type="hidden" value="assets/pickleball-court-real-01.jpg">
+          </div>
+          <button class="button button-dark" id="add-court-button" type="submit" disabled>Add court</button>
+          <span class="admin-rate-status" id="add-court-status" role="status" aria-live="polite"></span>
+        </form>
+        <div class="admin-rate-list" id="court-rate-list" aria-busy="true" aria-label="Existing courts and hourly rates">
+          <p>Loading current court rates…</p>
+        </div>
+      </section>
+      <section class="admin-rates admin-promos" id="promo-codes" aria-labelledby="promo-codes-title" hidden>
+        <div class="admin-list-heading">
+          <div>
+            <h1 id="promo-codes-title">Promo codes</h1>
+            <p>Create discounts customers can apply to their booking estimates.</p>
+          </div>
+        </div>
+        <p class="admin-rates-note">Percentage discounts are 1–99%. Fixed discounts are capped so every booking remains at least ₱1. Set an optional expiry and redemption limit. Each customer can redeem a code once per email address.</p>
+        <p class="admin-rates-feedback" id="promo-codes-feedback" role="status" aria-live="polite">Loading promo codes…</p>
+        <form class="admin-promo-add-form" id="promo-code-add-form">
+          <label for="new-promo-code">Generated promo code
+            <span class="admin-promo-code-control">
+              <input id="new-promo-code" name="code" type="text" minlength="2" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9_-]{1,39}" autocomplete="off" readonly required>
+              <button class="button button-outline-light" id="generate-promo-code-button" type="button">Generate code</button>
+            </span>
+          </label>
+          <label for="new-promo-type">Discount type
+            <select id="new-promo-type" name="discount_type" required>
+              <option value="percentage">Percentage</option>
+              <option value="fixed">Fixed amount</option>
+            </select>
+          </label>
+          <label for="new-promo-value" id="new-promo-value-label">Discount value (%)
+            <input id="new-promo-value" name="discount_value" type="number" min="1" max="99" step="1" inputmode="numeric" required>
+          </label>
+          <label for="new-promo-expiry">Expires at · PHT (optional)
+            <input id="new-promo-expiry" name="expires_at" type="datetime-local">
+          </label>
+          <label for="new-promo-limit">Max redemptions (optional)
+            <input id="new-promo-limit" name="max_redemptions" type="number" min="1" max="1000000" step="1" inputmode="numeric">
+          </label>
+          <button class="button button-dark" id="add-promo-code-button" type="submit">Add promo code</button>
+          <span class="admin-rate-status" id="add-promo-code-status" role="status" aria-live="polite"></span>
+        </form>
+        <div class="admin-rate-list admin-promo-list" id="promo-code-list" aria-busy="true" aria-label="Existing promo codes">
+          <p>Loading promo codes…</p>
+        </div>
+      </section>
+      <p class="admin-notice"><strong>Staff access:</strong> booking requests are stored in the shared Supabase database. Only signed-in staff can view, update, or delete them.</p>
+    </div>
+  </main>
+
+  <dialog class="admin-calendar-dialog" id="calendar-day-dialog" aria-labelledby="calendar-day-title">
+    <div class="admin-calendar-dialog-content">
+      <div class="admin-calendar-dialog-heading">
+        <div>
+          <h2 id="calendar-day-title"></h2>
+          <p id="calendar-day-summary" role="status" aria-live="polite"></p>
+        </div>
+        <button class="admin-dialog-close" id="calendar-day-close" type="button" aria-label="Close calendar">×</button>
+      </div>
+      <section class="admin-calendar-blockout" aria-labelledby="admin-calendar-blockout-title">
+        <div class="admin-calendar-blockout-heading">
+          <div>
+            <h3 id="admin-calendar-blockout-title">Maintenance and closures</h3>
+            <p>Choose which courts are affected, then set the time window.</p>
+          </div>
+        </div>
+        <div class="admin-calendar-block-list" id="admin-calendar-block-list" aria-live="polite">
+          <p class="admin-calendar-empty">No maintenance or closure windows for this date.</p>
+        </div>
+        <form class="admin-blockout-form" id="admin-blockout-form">
+          <input id="admin-blockout-date" name="blocked_date" type="hidden">
+          <fieldset class="admin-blockout-courts">
+            <legend>Apply block to</legend>
+            <div class="admin-blockout-scope-options">
+              <label class="admin-blockout-scope-choice" for="admin-blockout-whole-club">
+                <input id="admin-blockout-whole-club" name="block_scope" type="radio" value="whole" checked>
+                <span><strong>Whole club</strong><small>Every court is unavailable</small></span>
+              </label>
+              <label class="admin-blockout-scope-choice" for="admin-blockout-selected-courts">
+                <input id="admin-blockout-selected-courts" name="block_scope" type="radio" value="courts">
+                <span><strong>Selected courts</strong><small>Choose one or more courts</small></span>
+              </label>
+            </div>
+            <div class="admin-blockout-court-options" id="admin-blockout-court-options" aria-label="Courts affected"></div>
+            <p class="admin-blockout-selection" id="admin-blockout-selection" role="status" aria-live="polite"></p>
+          </fieldset>
+          <label for="admin-blockout-type">Block type
+            <select id="admin-blockout-type" name="block_type" required>
+              <option value="maintenance">Maintenance</option>
+              <option value="closed">Club closed</option>
+            </select>
+          </label>
+          <label class="admin-blockout-time-field" for="admin-blockout-start">From
+            <input id="admin-blockout-start" name="start_time" type="time" min="00:00" max="23:30" step="900" value="10:00" required>
+          </label>
+          <label class="admin-blockout-time-field" for="admin-blockout-end">Until
+            <input id="admin-blockout-end" name="end_time" type="time" min="00:15" max="23:45" step="900" value="11:00" required>
+          </label>
+          <label class="admin-blockout-all-day" for="admin-blockout-all-day">
+            <input id="admin-blockout-all-day" name="all_day" type="checkbox">
+            All day
+          </label>
+          <label class="admin-blockout-reason" for="admin-blockout-reason">Reason
+            <input id="admin-blockout-reason" name="reason" type="text" list="admin-blockout-reasons" minlength="2" maxlength="120" placeholder="Choose a suggestion or type a reason" required>
+            <datalist id="admin-blockout-reasons">
+              <option value="Court repair"></option>
+              <option value="Court resurfacing"></option>
+              <option value="Net replacement"></option>
+              <option value="Lighting repair"></option>
+              <option value="Cleaning"></option>
+              <option value="Private event"></option>
+              <option value="Weather closure"></option>
+            </datalist>
+          </label>
+          <button class="button button-dark" id="admin-blockout-submit" type="submit">Block time</button>
+          <p class="admin-blockout-feedback" id="admin-blockout-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+      <div class="admin-calendar-legend" aria-label="Schedule legend">
+        <span class="is-booked">Booked</span>
+        <span class="is-available">Available</span>
+        <span class="is-closed">Maintenance or closed</span>
+      </div>
+      <div class="admin-calendar-day-bookings" id="calendar-day-bookings" aria-live="polite" aria-busy="false">
+        <p class="admin-calendar-empty">Booking dates will appear here when loaded.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="admin-booking-dialog" id="admin-booking-dialog" aria-labelledby="admin-booking-title">
+    <form class="admin-booking-form" id="admin-booking-form">
+      <div class="admin-booking-heading">
+        <div><h2 id="admin-booking-title">Create a booking</h2></div>
+        <button class="admin-dialog-close" id="admin-booking-close" type="button" aria-label="Close booking form">×</button>
+      </div>
+      <p class="admin-booking-feedback" id="admin-booking-feedback" role="status" aria-live="polite"></p>
+      <div class="admin-booking-fields">
+        <label for="admin-booking-name">Player name<input id="admin-booking-name" name="name" type="text" maxlength="120" autocomplete="name" required></label>
+          <label for="admin-booking-email">Email address<input id="admin-booking-email" name="email" type="email" maxlength="254" autocomplete="email" required></label>
+        <label for="admin-booking-players">Players
+          <select id="admin-booking-players" name="players" required>
+            <option value="">Choose players</option>
+            <option value="2 players">2 players</option>
+            <option value="3 players">3 players</option>
+            <option value="4 players">4 players</option>
+          </select>
+        </label>
+        <label for="admin-booking-duration">Duration
+          <select id="admin-booking-duration" name="duration" required>
+            <option value="">Choose duration</option>
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+          </select>
+        </label>
+        <fieldset class="admin-booking-court-picker">
+          <legend>Choose court(s)</legend>
+          <div class="admin-booking-court-options" id="admin-booking-courts"></div>
+          <small>All selected courts share the date and time.</small>
+        </fieldset>
+        <label for="admin-booking-date">Date<input id="admin-booking-date" name="date" type="date" required></label>
+        <label for="admin-booking-time">Available courts and times
+          <select id="admin-booking-time" name="time" required disabled>
+            <option value="">Choose a duration first</option>
+          </select>
+        </label>
+        <label for="admin-booking-promo">Promo code (optional)
+          <input id="admin-booking-promo" name="promo" type="text" maxlength="40" autocomplete="off">
+          <span class="admin-booking-promo-feedback" id="admin-booking-promo-feedback" role="status" aria-live="polite"></span>
+        </label>
+      </div>
+      <div class="admin-booking-footer">
+        <p>Estimated total <strong id="admin-booking-total">Choose a court &amp; duration</strong></p>
+        <button class="button button-lime" id="admin-booking-submit" type="submit">Save booking <span aria-hidden="true">↗</span></button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

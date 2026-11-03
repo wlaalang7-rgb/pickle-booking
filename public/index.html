@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5ef">
+  <meta name="description" content="Book a pickleball court, meet your people, and play at your pace. Find court rates, weekly availability, and player info at PickleCourt.">
+  <title>PickleCourt — Good games start here</title>
+  <link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase.js" defer></script>
+  <script src="js/skeletons.js" defer></script>
+  <script src="js/site-state.js" defer></script>
+  <script src="js/site-ui.js" defer></script>
+  <script src="js/availability.js" defer></script>
+  <script src="js/booking.js" defer></script>
+  <script src="js/cancellation.js" defer></script>
+  <script src="js/site-extras.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="PickleCourt home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><path d="M13 5a9 9 0 0 1 9 9v8a9 9 0 1 1-18 0v-8a9 9 0 0 1 9-9Z"/><path d="m16 29 7 7M27 8h1m5 5h1m-7 5h1m6 4h1m-7 5h1"/></svg>
+      </span>
+      <span>pickle<span class="brand-light">rally</span></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation">
+      <span></span><span></span>
+    </button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+      <a href="#courts">Courts</a>
+      <a href="#schedule">Availability</a>
+      <a href="#experience">The club</a>
+      <a href="#visit">Visit us</a>
+    </nav>
+    <a class="button button-dark header-cta" href="#book">Book a court <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main">
+    <section class="hero section-wrap" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> YOUR NEIGHBORHOOD PICKLEBALL CLUB</p>
+        <h1>Good games<br>start <span>here.</span></h1>
+        <p class="hero-description">Grab a paddle, bring your people, and play a little longer. Your next favorite court is just around the corner.</p>
+        <div class="hero-actions">
+          <a class="button button-lime" href="#book">Find your court <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="#schedule">See this week's games <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-proof">
+          <div class="player-stack" aria-hidden="true"><span>J</span><span>M</span><span>A</span><span>+</span></div>
+          <p><strong>All levels welcome.</strong><br>First game or fiftieth, you're in.</p>
+        </div>
+      </div>
+      <div class="hero-art-wrap">
+        <div class="hero-sticker">PLAY<br><span>YOUR</span><br>GAME <b>↗</b></div>
+        <img class="hero-art" src="assets/1.jpg" alt="Graphic illustration of a pickleball paddle and ball over a green court">
+        <div class="hero-caption"><span class="caption-dot"></span> OPEN PLAY · EVERY DAY</div>
+      </div>
+      <div class="hero-bottom-note"><span>01 / 04</span><span>GOOD ENERGY. GREAT RALLIES.</span><span>SCROLL TO EXPLORE ↓</span></div>
+    </section>
+
+    <section class="ticker" aria-label="PickleCourt highlights">
+      <div class="ticker-track" aria-hidden="true">
+        <div class="ticker-group"><span>YOUR COURT, YOUR CREW</span><i>✳</i><span>GOOD RALLIES ONLY</span><i>✳</i><span>ALL LEVELS WELCOME</span><i>✳</i></div>
+        <div class="ticker-group"><span>YOUR COURT, YOUR CREW</span><i>✳</i><span>GOOD RALLIES ONLY</span><i>✳</i><span>ALL LEVELS WELCOME</span><i>✳</i></div>
+        <div class="ticker-group"><span>YOUR COURT, YOUR CREW</span><i>✳</i><span>GOOD RALLIES ONLY</span><i>✳</i><span>ALL LEVELS WELCOME</span><i>✳</i></div>
+        <div class="ticker-group"><span>YOUR COURT, YOUR CREW</span><i>✳</i><span>GOOD RALLIES ONLY</span><i>✳</i><span>ALL LEVELS WELCOME</span><i>✳</i></div>
+      </div>
+    </section>
+
+    <section class="section-wrap courts-section" id="courts">
+      <div class="section-heading">
+        <div><p class="eyebrow">PICK YOUR PLAYING FIELD</p><h2>Room for<br><span>one more game.</span></h2></div>
+        <p class="section-intro">Pick a court for daytime rallies, evening games, and plenty of room to find your rhythm.</p>
+      </div>
+      <div class="court-grid" id="public-court-list" aria-live="polite" aria-busy="true">
+        <span class="skeleton-visually-hidden">Loading courts and rates</span>
+        <span class="court-skeleton-cards" aria-hidden="true"></span>
+      </div>
+      <div class="court-note"><span class="note-icon">✳</span><span><strong>New to pickleball?</strong> Paddle rental is on us for your first visit. Just ask when you arrive.</span><a href="#visit">Plan your visit <span aria-hidden="true">↗</span></a></div>
+    </section>
+
+    <section class="schedule-section" id="schedule">
+      <div class="section-wrap schedule-inner">
+        <div class="section-heading schedule-heading">
+          <div><p class="eyebrow">MAKE A DATE WITH THE COURT</p><h2>Find your<br><span>perfect slot.</span></h2></div>
+          <div class="schedule-side"><p>See each court's hourly status for the full day, from 12 AM to midnight. Customer names and contact details stay private.</p><span class="availability-key"><i></i> Hourly court status</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="schedule-top">
+            <div class="schedule-heading-label"><span class="live-dot"></span><span>COURT AVAILABILITY</span></div>
+            <div class="calendar-navigation" aria-label="Choose calendar month">
+              <button class="calendar-nav-button" id="previous-month" type="button" aria-label="Previous month">←</button>
+              <h3 id="schedule-month" aria-live="polite"></h3>
+              <button class="calendar-nav-button" id="next-month" type="button" aria-label="Next month">→</button>
+            </div>
+          </div>
+          <div class="schedule-scroll" role="region" aria-label="Court availability calendar">
+            <div class="schedule-grid" id="schedule-grid" role="grid" aria-label="Court availability calendar by date" aria-busy="true"></div>
+          </div>
+          <p class="calendar-message" id="calendar-message" role="status" aria-live="polite" aria-busy="true">Loading court reservations…</p>
+          <dialog class="availability-dialog" id="availability-dialog" aria-labelledby="availability-dialog-title">
+            <div class="availability-dialog-header">
+              <h4 id="availability-dialog-title"></h4>
+              <button class="availability-dialog-close" id="availability-dialog-close" type="button" aria-label="Close availability details">×</button>
+            </div>
+            <div class="availability-detail-slots" id="availability-detail-slots" role="table" aria-label="Hourly court status" aria-busy="true"></div>
+          </dialog>
+          <div class="schedule-bottom"><span>Confirmed bookings appear here. A booking request is not confirmed until our team replies.</span><a class="button button-dark button-small" href="#book">Request a time <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="schedule-guide" aria-label="Schedule status explanations">
+          <h3>Availability guide</h3>
+          <ul>
+            <li><span class="slot slot-booked">BOOKED</span><p>Confirmed court reservation.</p></li>
+            <li><span class="slot slot-open">OPEN</span><p>No active booking or scheduled activity for this hour.</p></li>
+            <li><span class="slot slot-closed">CLOSED</span><p>Unavailable during a maintenance or closure time across all courts.</p></li>
+            <li><span class="slot slot-clinic">OPEN PLAY</span><p>Sample schedule: Wed/Sat 7–10 AM; Thu/Sun 4–10 PM.</p></li>
+            <li><span class="slot slot-maintenance">MAINTENANCE</span><p>Sample schedule: Tuesday, 10 AM–4 PM.</p></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="booking-section section-wrap" id="book">
+      <div class="booking-copy">
+        <p class="eyebrow">YOUR NEXT GAME IS CALLING</p>
+        <h2>Let's get you<br><span>on court.</span></h2>
+        <p>Pick a court and time, tell us who's playing, and send your request straight to our team.</p>
+        <div class="booking-perks"><div><span>01</span><p><strong>Choose your courts</strong><br>Select one or more pickleball courts.</p></div><div><span>02</span><p><strong>Pick your time</strong><br>We'll confirm what's available.</p></div><div><span>03</span><p><strong>We'll see you there</strong><br>Pay at the club after confirmation.</p></div></div>
+        <p class="booking-fineprint">No payment is taken on this website. Your slot is not confirmed until our team replies.</p>
+      </div>
+      <form class="booking-form" id="booking-form">
+        <div class="form-topline"><span>COURT REQUEST</span><span>01 / 03</span></div>
+        <h3>Make it a date.</h3>
+        <p>We'll help you lock in the good stuff.</p>
+        <div class="form-row">
+          <label>Your name<input name="name" autocomplete="name" placeholder="e.g. Buldak Bolong" required></label>
+          <label>Email address<input name="email" type="email" maxlength="254" autocomplete="email" placeholder="you@example.com" required></label>
+        </div>
+        <div class="form-row">
+          <fieldset class="booking-court-picker" id="booking-court-picker" disabled>
+            <legend>Choose court(s) <span class="booking-court-selected-count" id="booking-court-selected-count">0 selected</span></legend>
+            <div class="booking-court-options" id="booking-court-options" aria-busy="true"></div>
+            <small id="booking-court-help" aria-live="polite" aria-atomic="true">Choose one or more courts. All selections share the same date and time.</small>
+          </fieldset>
+          <label>Players<select name="players" required><option value="">How many?</option><option>2 players</option><option>3 players</option><option>4 players</option></select></label>
+        </div>
+        <div class="form-row">
+          <label>Play for<select name="duration" id="booking-duration" required><option value="">Choose duration</option><option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option></select></label>
+          <div class="booking-estimate" aria-live="polite" aria-busy="true"><span>ESTIMATED COURT TOTAL</span><strong id="booking-estimate"><span class="skeleton-shape skeleton-estimate-value" aria-hidden="true"></span><span class="skeleton-visually-hidden">Loading court rates</span></strong><small id="booking-price-breakdown"></small><small>Estimate only · final price confirmed by our team</small></div>
+        </div>
+        <div class="form-row">
+          <label>Date<input name="date" id="booking-date" type="date" required></label>
+          <label>Preferred time<select name="time" id="booking-time" required disabled><option value="">Choose a duration first</option></select></label>
+        </div>
+        <p class="booking-date-availability" id="booking-date-availability" role="status" aria-live="polite"></p>
+        <p class="booking-rate-hint">Day rate applies to bookings starting before 5 PM. Night rate applies to bookings starting at or after 5 PM.</p>
+        <label>Promo code <span class="optional-label">OPTIONAL</span><input name="promo" id="promo-code" maxlength="40" autocomplete="off" placeholder="Enter a promo code"><span class="promo-feedback" id="promo-feedback" aria-live="polite"></span></label>
+        <label>Anything we should know? <span class="optional-label">OPTIONAL</span><textarea name="notes" rows="2" placeholder="First time playing? Need paddles? Let us know."></textarea></label>
+        <button class="button button-lime form-submit" type="submit" disabled>Send booking inquiry <span aria-hidden="true">↗</span></button>
+        <p class="form-terms">Your booking reference and secure cancellation link will be emailed to you. Your booking is not confirmed until our team replies.</p>
+        <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="cancellation-section section-wrap" id="cancel-booking">
+      <div class="cancellation-copy">
+        <p class="eyebrow">NEED TO CHANGE YOUR PLANS?</p>
+        <h2>Cancel a<br><span>booking.</span></h2>
+        <p>Cancel within 48 hours of submitting your booking request. After that window, cancellations through this page are no longer available.</p>
+        <p>Enter the booking reference and email address from your request, or open the secure cancellation link sent to your email.</p>
+      </div>
+      <form class="cancellation-form" id="cancellation-form">
+        <label>Booking reference<input id="cancellation-reference" name="reference" maxlength="36" placeholder="Reference from your booking confirmation" autocomplete="off" required></label>
+        <label>Email used for the booking<input id="cancellation-email" name="email" type="email" maxlength="254" autocomplete="email" required></label>
+        <button class="button button-dark" type="submit">Cancel booking</button>
+        <p class="cancellation-message" id="cancellation-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="experience-section" id="experience">
+      <div class="section-wrap experience-inner">
+        <div class="section-heading experience-heading"><div><p class="eyebrow">MORE THAN A COURT</p><h2>Come for the game.<br><span>Stay for your people.</span></h2></div><p class="section-intro">Whether you're here to compete, learn, or just have a laugh—there's a place for you here.</p></div>
+        <div class="experience-grid">
+          <article class="experience-card gallery-card"><div class="experience-art"><img src="assets/pickleball-play-01.jpg" alt="Pickleball player reaching for a shot on court" loading="lazy"><button class="gallery-open" type="button" data-gallery="assets/pickleball-play-01.jpg" aria-label="View pickleball player reaching for a shot">↗</button></div><div class="experience-card-copy"><span>01 — THE COURTS</span><h3>Made for one<br>more rally.</h3><a href="#courts">Meet the courts <span aria-hidden="true">↗</span></a></div></article>
+          <article class="experience-card social-card"><div class="social-orbit" aria-hidden="true"><div class="orbit-ring"></div><div class="orbit-paddle">✳</div><div class="orbit-ball">●</div><div class="orbit-copy">PLAY<br>TOGETHER</div></div><div class="experience-card-copy"><span>02 — THE COMMUNITY</span><h3>Good games.<br>Great company.</h3><a href="#events">Find your people <span aria-hidden="true">↗</span></a></div></article>
+          <article class="experience-card clinic-card"><div class="clinic-visual" aria-hidden="true"><span class="clinic-tag">ALL LEVELS</span><span class="clinic-big">OPEN<br><i>PLAY</i></span><span class="clinic-ball">●</span></div><div class="experience-card-copy"><span>03 — THE GOOD STUFF</span><h3>Try something<br>new this week.</h3><a href="#events">See what's on <span aria-hidden="true">↗</span></a></div></article>
+        </div>
+        <div class="gallery-heading"><div><p class="eyebrow">A LITTLE LOOK AROUND</p><h3>Pickleball, <span>up close.</span></h3></div><p>Tap any image to take a closer look.</p></div>
+        <div class="photo-gallery" aria-label="Pickleball photo gallery">
+          <button class="gallery-open gallery-tile" type="button" data-gallery="https://images.pexels.com/photos/35775728/pexels-photo-35775728/free-photo-of-nighttime-pickleball-game-on-outdoor-court.jpeg?auto=compress&amp;w=1600" aria-label="View friends playing pickleball at night"><img src="https://images.pexels.com/photos/35775728/pexels-photo-35775728/free-photo-of-nighttime-pickleball-game-on-outdoor-court.jpeg?auto=compress&amp;w=700" alt="Friends enjoying a pickleball game on a floodlit court" loading="lazy"></button>
+          <button class="gallery-open gallery-tile" type="button" data-gallery="https://images.pexels.com/photos/29439365/pexels-photo-29439365/free-photo-of-man-playing-pickleball-indoors-in-ha-n-i.jpeg?auto=compress&amp;w=1600" aria-label="View pickleball player in an indoor match"><img src="https://images.pexels.com/photos/29439365/pexels-photo-29439365/free-photo-of-man-playing-pickleball-indoors-in-ha-n-i.jpeg?auto=compress&amp;w=700" alt="Player in action during an indoor pickleball match" loading="lazy"></button>
+          <button class="gallery-open gallery-tile" type="button" data-gallery="https://images.pexels.com/photos/36832155/pexels-photo-36832155/free-photo-of-young-man-enjoying-a-game-of-pickleball-outdoors.jpeg?auto=compress&amp;w=1600" aria-label="View outdoor pickleball game"><img src="https://images.pexels.com/photos/36832155/pexels-photo-36832155/free-photo-of-young-man-enjoying-a-game-of-pickleball-outdoors.jpeg?auto=compress&amp;w=700" alt="Outdoor pickleball player enjoying a sunny game" loading="lazy"></button>
+          <button class="gallery-open gallery-tile" type="button" data-gallery="https://images.pexels.com/photos/37143606/pexels-photo-37143606/free-photo-of-aerial-view-of-outdoor-pickleball-courts-in-philadelphia.jpeg?auto=compress&amp;w=1600" aria-label="View pickleball courts from above"><img src="https://images.pexels.com/photos/37143606/pexels-photo-37143606/free-photo-of-aerial-view-of-outdoor-pickleball-courts-in-philadelphia.jpeg?auto=compress&amp;w=700" alt="Aerial view of pickleball courts during outdoor play" loading="lazy"></button>
+        </div>
+        <p class="gallery-credit">Real pickleball player photos via <a href="https://www.pexels.com/search/pickleball/" target="_blank" rel="noreferrer">Pexels</a>.</p>
+      </div>
+    </section>
+
+    <section class="events-section section-wrap" id="events">
+      <div class="events-header"><div><p class="eyebrow">ON THE COURT THIS MONTH</p><h2>Play dates<br><span>&amp; good times.</span></h2></div><p>Come solo, bring your crew, or find a new one when you get here. Message us to save a spot.</p></div>
+      <div class="event-list">
+        <article class="event-row"><div class="event-date"><strong>SAT</strong><span>08</span></div><div class="event-name"><span>COMMUNITY · ALL LEVELS</span><h3>Saturday Social Rally</h3></div><div class="event-detail"><span>9:00 AM — 11:00 AM</span><span>Friendly doubles, new faces welcome</span></div><a class="round-link" href="https://wa.me/?text=Hi%20PickleCourt!%20I%27m%20interested%20in%20the%20Saturday%20Social%20Rally." target="_blank" rel="noreferrer" aria-label="Ask about Saturday Social Rally">↗</a></article>
+        <article class="event-row"><div class="event-date"><strong>THU</strong><span>13</span></div><div class="event-name"><span>BEGINNER · COACHING</span><h3>First Paddle Session</h3></div><div class="event-detail"><span>5:00 PM — 6:30 PM</span><span>Learn the basics, paddles included</span></div><a class="round-link" href="https://wa.me/?text=Hi%20PickleCourt!%20I%27m%20interested%20in%20the%20First%20Paddle%20Session." target="_blank" rel="noreferrer" aria-label="Ask about First Paddle Session">↗</a></article>
+        <article class="event-row"><div class="event-date"><strong>SUN</strong><span>23</span></div><div class="event-name"><span>COMMUNITY · FRIENDLY DOUBLES</span><h3>Sunday Side-Out</h3></div><div class="event-detail"><span>4:00 PM — 6:00 PM</span><span>Easygoing games, all levels welcome</span></div><a class="round-link" href="https://wa.me/?text=Hi%20PickleCourt!%20I%27m%20interested%20in%20Sunday%20Side-Out." target="_blank" rel="noreferrer" aria-label="Ask about Sunday Side-Out">↗</a></article>
+      </div>
+      <p class="sample-note">Event dates are examples. Message us for the latest schedule and to reserve your spot.</p>
+    </section>
+
+    <section class="membership-section">
+      <div class="section-wrap membership-inner">
+        <div><p class="eyebrow">A LITTLE MORE COURT TIME?</p><h2>Your regular<br><span>game plan.</span></h2><p class="membership-description">Make PickleCourt your home court. Ask us about flexible memberships and group packages that fit your crew.</p><a class="button button-dark" href="https://wa.me/?text=Hi%20PickleCourt!%20I%27d%20love%20to%20hear%20about%20your%20membership%20plans." target="_blank" rel="noreferrer">Ask about memberships <span aria-hidden="true">↗</span></a></div>
+        <div class="membership-stamp" aria-label="Good people, great pickleball"><span>GOOD PEOPLE</span><b>✳</b><span>GREAT PICKLEBALL</span></div>
+      </div>
+      <div class="section-wrap player-perks">
+        <div class="membership-options">
+          <article class="membership-option"><span>FOR THE OCCASIONAL GAME</span><h3>Drop-in</h3><p>Book a court when it works for you. No commitment.</p><a href="https://wa.me/?text=Hi%20PickleCourt!%20Tell%20me%20about%20drop-in%20court%20rates." target="_blank" rel="noreferrer">Ask about drop-in ↗</a></article>
+          <article class="membership-option featured-option"><span>FOR YOUR REGULAR CREW</span><h3>Regular</h3><p>Ask about recurring play and member perks.</p><a href="https://wa.me/?text=Hi%20PickleCourt!%20Tell%20me%20about%20regular%20player%20membership." target="_blank" rel="noreferrer">Ask about Regular ↗</a></article>
+          <article class="membership-option"><span>FOR THE WHOLE CREW</span><h3>Squad</h3><p>Explore group options for friends, family, or workmates.</p><a href="https://wa.me/?text=Hi%20PickleCourt!%20Tell%20me%20about%20group%20court%20packages." target="_blank" rel="noreferrer">Ask about Squad ↗</a></article>
+        </div>
+        <!-- <div class="loyalty-preview">
+          <div><span class="loyalty-kicker">THE MORE YOU PLAY</span><h3>Rally rewards <span>preview.</span></h3><p>Example: play 10 visits, get your next visit free. Ask our team to confirm actual rewards and terms.</p></div>
+          <div class="loyalty-progress"><div class="loyalty-count"><strong id="loyalty-count">7</strong><span>/ 10 visits</span></div><div class="progress-track"><span id="loyalty-progress"></span></div><div class="loyalty-actions"><button class="button button-dark button-small" id="loyalty-add" type="button">Add demo visit +</button><span id="loyalty-status" aria-live="polite">3 visits to your next reward</span></div></div>
+          <small>Demo tracker only. Progress resets when you reload and is not linked to bookings or an account.</small>
+        </div> -->
+      </div>
+    </section>
+
+    <section class="rules-section section-wrap" id="rules">
+      <div class="rules-intro"><p class="eyebrow">A GOOD GAME IS A KIND GAME</p><h2>Our court.<br><span>Our good manners.</span></h2><p>A few little things help everyone have a better time. New to pickleball? No worries—our crew is happy to show you the ropes.</p></div>
+      <div class="rules-list">
+        <details><summary><span>01</span><strong>Call the lines honestly.</strong><i>+</i></summary><p>If you're not sure, give the benefit of the doubt. Good sportsmanship makes a better game.</p></details>
+        <details><summary><span>02</span><strong>Share the court &amp; rotate in.</strong><i>+</i></summary><p>Respect your booking time and help the next group get on court promptly. Ask our staff about open-play rotations.</p></details>
+        <details><summary><span>03</span><strong>Keep it safe and friendly.</strong><i>+</i></summary><p>Wear court-appropriate shoes, keep bags off the playing area, and give other players room to move.</p></details>
+        <details><summary><span>04</span><strong>Take care of our gear.</strong><i>+</i></summary><p>Return rented paddles after play, pick up your balls, and leave the court ready for the next rally.</p></details>
+      </div>
+    </section>
+
+    <section class="visit-section" id="visit">
+      <div class="section-wrap visit-inner">
+        <div class="visit-copy"><p class="eyebrow">SAVE US A SPOT IN YOUR WEEK</p><h2>See you<br><span>on court.</span></h2><p>Bring your crew, or come as you are. We'll take it from there.</p><a class="button button-lime" href="#book">Plan your first game <span aria-hidden="true">↗</span></a></div>
+        <div class="visit-details">
+          <div class="visit-detail"><span>COME FIND US</span><strong>SM City Valenzuela</strong><div class="visit-actions"><a href="https://www.google.com/maps/search/?api=1&amp;query=SM%20City%20Valenzuela" target="_blank" rel="noreferrer">Get directions ↗</a><!--<button class="qr-trigger" id="qr-trigger" type="button">Print website QR ↗</button>--></div><iframe class="location-map" title="Interactive map to SM City Valenzuela" src="https://maps.google.com/maps?q=SM%20City%20Valenzuela&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+          <div class="visit-detail"><span>OPEN EVERY DAY</span><strong>7:00 AM — 10:00 PM</strong><p>Holiday hours may vary. Message us before your visit.</p></div>
+          <div class="visit-detail"><span>NEED A HAND?</span><strong>Let's talk pickleball.</strong><div class="contact-links"><a href="https://wa.me/?text=Hi%20PickleCourt!%20I%20have%20a%20question%20about%20playing." target="_blank" rel="noreferrer">WhatsApp ↗</a><a href="https://m.me/" target="_blank" rel="noreferrer">Messenger ↗</a><a href="https://m.me/" target="_blank" rel="noreferrer">Facebook ↗</a></div></div>
+          <div class="holiday-notice"><span>✳</span><p><strong>Holiday heads-up</strong><br>Hours may change on public holidays. Check with us on WhatsApp or Messenger before heading over.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="#home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M13 5a9 9 0 0 1 9 9v8a9 9 0 1 1-18 0v-8a9 9 0 0 1 9-9Z"/><path d="m16 29 7 7M27 8h1m5 5h1m-7 5h1m6 4h1m-7 5h1"/></svg></span><span>pickle<span class="brand-light">court</span></span></a>
+    <p>GOOD GAMES START HERE.</p><div><a href="#rules">Court etiquette</a><a href="#cancel-booking">Cancel a booking</a><a href="#visit">Visit us</a><span>© <span id="year"></span> PickleCourt</span></div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top" title="Back to top" disabled>
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>
+  </button>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Pickleball court image viewer">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img alt="Pickleball court">
+  </dialog>
+  <dialog class="qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
+    <button class="lightbox-close qr-close" type="button" aria-label="Close QR code">×</button>
+    <p class="eyebrow">TAKE PICKLECOURT WITH YOU</p>
+    <h2 id="qr-title">Scan. Play. <span>Repeat.</span></h2>
+    <img id="website-qr" alt="QR code linking to the PickleCourt website">
+    <p id="qr-message">Scan this code to visit the PickleCourt website.</p>
+    <button class="button button-dark qr-print" type="button" id="qr-print">Print QR code ↗</button>
+  </dialog>
+</body>
+</html>
