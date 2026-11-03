@@ -13,6 +13,15 @@ const getSelectedBookingCourts = () => (
   [...bookingCourtOptions.querySelectorAll('input[name="courts"]:checked')].map((input) => input.value)
 );
 
+bookingResultClose.addEventListener("click", () => bookingResultDialog.close());
+bookingResultDone.addEventListener("click", () => bookingResultDialog.close());
+bookingResultDialog.addEventListener("click", (event) => {
+  if (event.target === bookingResultDialog) bookingResultDialog.close();
+});
+bookingResultDialog.querySelector(".booking-result-contact").addEventListener("click", () => {
+  bookingResultDialog.close();
+});
+
 const updateBookingCourtSelection = () => {
   const selectedCount = getSelectedBookingCourts().length;
   bookingCourtSelectedCount.textContent = `${selectedCount} selected`;
@@ -540,8 +549,18 @@ bookingForm.addEventListener("submit", async (event) => {
   bookingMessage.setAttribute("role", "status");
   bookingMessage.removeAttribute("aria-busy");
   bookingMessage.textContent = booking.emailSent
-    ? `SUCCESS — Request sent. Reference ${booking.reference} and a secure cancellation link were emailed to you. Your booking is not confirmed until our team replies.`
-    : `REQUEST SAVED — Reference ${booking.reference}. We couldn't send the confirmation email, so save this reference and contact the club. Your booking is not confirmed until our team replies.`;
+    ? `Request sent. Reference ${booking.reference}.`
+    : `Request saved, but its email could not be sent. Reference ${booking.reference}.`;
+  bookingResultTitle.textContent = booking.emailSent ? "Request received" : "Request saved";
+  bookingResultDescription.textContent = booking.emailSent
+    ? "Your request is in our system. The reference and secure cancellation link have been sent to your email."
+    : "Your request is in our system, but we couldn't send the reference email. Save this reference and contact the club; please don't submit another request.";
+  bookingResultReference.textContent = booking.reference;
+  bookingResultEmailStatus.textContent = booking.emailSent
+    ? "Check your inbox for the booking details and secure cancellation link."
+    : "No email was sent. Keep this reference so the club can find your request.";
+  bookingResultDialog.classList.toggle("is-email-warning", !booking.emailSent);
+  bookingResultDialog.showModal();
   saveButton.firstChild.textContent = originalButtonText;
   saveButton.disabled = false;
 });

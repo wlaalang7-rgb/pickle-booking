@@ -56,6 +56,8 @@ Use the status selector in the booking row:
 
 When one customer request includes multiple courts, changing the status of one row updates the entire grouped request. Check the related courts before changing it.
 
+After a public request is saved, the customer sees a result dialog with the booking reference and email-delivery status. This does not confirm the reservation; staff must still review and update the booking status.
+
 ### Create a staff booking
 
 1. From **Analytics**, select **New booking**.

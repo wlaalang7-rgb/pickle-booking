@@ -274,5 +274,24 @@
     <p id="qr-message">Scan this code to visit the PickleCourt website.</p>
     <button class="button button-dark qr-print" type="button" id="qr-print">Print QR code ↗</button>
   </dialog>
+  <dialog class="booking-result-dialog" id="booking-result-dialog" aria-labelledby="booking-result-title" aria-describedby="booking-result-description booking-result-reference booking-result-email-status booking-result-reminder">
+    <button class="lightbox-close booking-result-close" id="booking-result-close" type="button" aria-label="Close booking result">×</button>
+    <div class="booking-result-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="m8 16 5 5L24 10"></path></svg>
+    </div>
+    <p class="eyebrow">BOOKING REQUEST</p>
+    <h2 id="booking-result-title">Request received</h2>
+    <p class="booking-result-description" id="booking-result-description"></p>
+    <div class="booking-result-reference">
+      <span>YOUR REFERENCE</span>
+      <strong id="booking-result-reference">—</strong>
+    </div>
+    <p class="booking-result-email-status" id="booking-result-email-status"></p>
+    <p class="booking-result-reminder" id="booking-result-reminder">Your request is pending until our team confirms it. No payment has been taken.</p>
+    <div class="booking-result-actions">
+      <button class="button button-dark" id="booking-result-done" type="button">Done</button>
+      <a class="booking-result-contact" href="#visit">Contact the club <span aria-hidden="true">↗</span></a>
+    </div>
+  </dialog>
 </body>
 </html>

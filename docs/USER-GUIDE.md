@@ -25,7 +25,7 @@ The displayed total is an estimate, not a payment or receipt. The website does n
 
 ## 3. Find your reference and cancellation link
 
-After a successful submission, the page displays a booking reference. A booking email should also contain the reference, requested court details, and a secure cancellation link valid for 48 hours.
+After a successful submission, a confirmation dialog displays your booking reference and tells you whether the email was sent. When email delivery succeeds, the message includes the reference, requested court details, and a secure cancellation link valid for 48 hours. The dialog also reminds you that staff confirmation is still required.
 
 - If the page says the request was saved but the email could not be sent, keep the on-screen reference and contact the club. Do not submit the form again just to retry the email.
 - If the connection is interrupted and the page cannot confirm whether the request was saved, contact the club before trying again.
